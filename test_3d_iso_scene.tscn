@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3 uid="uid://cmbavf022sjh7"]
+
+[ext_resource type="Script" path="res://test_3d_iso_scene.gd" id="1_ga3rc"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dgkhg"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_320p4"]
+sky_material = SubResource("ProceduralSkyMaterial_dgkhg")
+
+[sub_resource type="Environment" id="Environment_pi4r3"]
+background_mode = 2
+sky = SubResource("Sky_320p4")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gud4v"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_srbfy"]
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_7gp3x"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_q24do"]
+material = SubResource("ORMMaterial3D_7gp3x")
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_fq2ua"]
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="Test3DIsoScene" type="Node3D"]
+script = ExtResource("1_ga3rc")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_pi4r3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
+mesh = SubResource("PlaneMesh_gud4v")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_srbfy")
+
+[node name="CamPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CamPivot"]
+transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, -50, 70, 50)
+projection = 1
+current = true
+size = 30.0
+far = 1000.0
+
+[node name="Player" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("BoxMesh_q24do")
+surface_material_override/0 = SubResource("ORMMaterial3D_fq2ua")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player"]
+remote_path = NodePath("../../CamPivot")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.544639, 0.669792, -0.504725, 0, 0.601815, 0.798636, 0.838671, 0.434968, -0.327772, -17, 20, -27)
+light_energy = 1.2
+shadow_enabled = true
