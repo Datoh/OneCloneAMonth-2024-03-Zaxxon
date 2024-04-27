@@ -6,7 +6,7 @@ const Z_MAX = 10.0
 const Y_MIN = 2.0
 const Y_MAX = 10.0
 
-func _physics_process(delta):
+func _physics_process(_delta):
   var input_dir = Input.get_vector("ui_down", "ui_up", "ui_left", "ui_right")
   var direction = (transform.basis * Vector3(0, input_dir.x, input_dir.y)).normalized()
   if direction:
