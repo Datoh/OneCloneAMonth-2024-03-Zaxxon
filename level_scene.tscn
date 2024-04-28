@@ -1,0 +1,88 @@
+[gd_scene load_steps=9 format=3 uid="uid://cmbavf022sjh7"]
+
+[ext_resource type="Script" path="res://level_scene.gd" id="1_6ji4k"]
+[ext_resource type="Script" path="res://player.gd" id="2_8bknt"]
+[ext_resource type="PackedScene" uid="uid://dowakwy4j3ele" path="res://assets/kenney_space-kit/craft_speederA.glb" id="3_metgw"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dgkhg"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_320p4"]
+sky_material = SubResource("ProceduralSkyMaterial_dgkhg")
+
+[sub_resource type="Environment" id="Environment_pi4r3"]
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_320p4")
+ambient_light_source = 2
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_onh2n"]
+size = Vector3(2, 0.6, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_milsp"]
+size = Vector3(0.5, 0.3, 2)
+
+[node name="Level" type="Node3D"]
+script = ExtResource("1_6ji4k")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_pi4r3")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("2_8bknt")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player"]
+remote_path = NodePath("../../CamPivot")
+
+[node name="craft_speederA" parent="Player" instance=ExtResource("3_metgw")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1, 0, -2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.4, 0)
+shape = SubResource("BoxShape3D_onh2n")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.2, 0)
+shape = SubResource("BoxShape3D_milsp")
+
+[node name="Area3D" type="Area3D" parent="Player"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.4, 0)
+shape = SubResource("BoxShape3D_onh2n")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Player/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.2, 0)
+shape = SubResource("BoxShape3D_milsp")
+
+[node name="CamPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CamPivot"]
+transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, -50, 70, 50)
+projection = 1
+current = true
+size = 30.0
+far = 1000.0
+
+[node name="MainLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-2.18557e-08, 0.866025, -0.5, 3.78552e-08, 0.5, 0.866025, 1, 0, -4.37114e-08, -17, 20, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="BackLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-4.37114e-08, -0.866025, 0.5, 0, 0.5, 0.866025, -1, 3.78552e-08, -2.18557e-08, 27, 20, 0)
+light_energy = 0.2
+light_cull_mask = 4294967293
+shadow_enabled = true
+
+[connection signal="collision" from="Player" to="." method="_on_player_collision"]
+[connection signal="body_entered" from="Player/Area3D" to="Player" method="_on_collision_entered"]

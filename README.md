@@ -13,6 +13,8 @@ A clone of [Zaxxon](https://fr.wikipedia.org/wiki/Zaxxon)
 ## Credits:
 * [MAME emulator](https://www.mamedev.org/)
 * [Zaxxon MAME ROM](https://www.planetemu.net/rom/mame-roms/zaxxon)
+* [Space Kit - Kenney](https://kenney.nl/assets/space-kit)
+* [Space Station Kit - Kenney](https://kenney.nl/assets/space-station-kit)
 
 ## Tools
 * [Godot 4.2.x](https://godotengine.org/)
